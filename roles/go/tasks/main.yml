@@ -1,0 +1,30 @@
+---
+- name: Copy golang file
+  copy:
+    src: ../../calculator.go
+    dest: $HOME
+
+- name: Copy service file calculator
+  become: yes
+  copy:
+    src: ../../calculatorservice.service
+    dest: /etc/systemd/system/
+
+- name: Download Golang
+  become: yes
+  unarchive:
+    src: https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
+    dest: /usr/local/
+    remote_src: yes
+
+- name: Set envarioment variable golang
+  lineinfile:
+    dest: $HOME/.bashrc
+    line: export PATH=$PATH:/usr/local/go/bin
+    insertafter: EOF
+
+- name: Execute .bashrc for add envarioment variable
+  shell: . $HOME/.bashrc
+
+- name: Install gorilla/mux
+  shell: /usr/local/go/bin/go get -v -u github.com/gorilla/mux

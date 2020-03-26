@@ -1,0 +1,10 @@
+---
+- name: Update CentOS Linux Version
+  yum: 
+    update_cache: yes
+
+- name: Install git
+  become: yes
+  yum:
+    name: git
+    state: present
